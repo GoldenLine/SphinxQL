@@ -30,4 +30,22 @@ class Client
         return $this->connection->execute($sphinxQL);
     }
 
+    /**
+     * @return int
+     */
+    public function getTotalCount()
+    {
+        $count = 0;
+        $sql   = 'SHOW META';
+        $meta  = $this->execute($sql);
+
+        foreach ($meta as $item) {
+            if ($item['Variable_name'] == 'total_found') {
+                $count = (int) $item['Value'];
+                break;
+            }
+        }
+
+        return $count;
+    }
 }
